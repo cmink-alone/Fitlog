@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ import java.util.List;
 
 public class ActivitiesFragment extends Fragment {
     private FloatingActionButton fab;
+    private CollapsingToolbarLayout toolbar_layout;
     private RecyclerView activity_list;
     public ActivityAdapter adapter;
     public List<Activity> activityList;
@@ -39,6 +41,7 @@ public class ActivitiesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityList = TriathlogDbHelper.getInstance(getActivity()).getAllActivity();
+
     }
 
     @Override
@@ -50,6 +53,10 @@ public class ActivitiesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        toolbar_layout = view.findViewById(R.id.toolbar_layout);
+        toolbar_layout.setTitle("Activities");
+
         activity_list = getActivity().findViewById(R.id.activity_list);
         fab = getActivity().findViewById(R.id.fab_add_activity);
         fab.setOnClickListener(new View.OnClickListener() {

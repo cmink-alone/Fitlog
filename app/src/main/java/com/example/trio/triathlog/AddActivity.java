@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +42,7 @@ public class AddActivity extends AppCompatActivity {
     MenuItem save;
     Activity activity;
 
+    private Toolbar toolbar_detail;
     boolean isAdd = true;
 
     public void populateData(Activity activity){
@@ -55,6 +57,9 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
+        toolbar_detail = findViewById(R.id.toolbar_detail);
+        setSupportActionBar(toolbar_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //load all data from sqlite

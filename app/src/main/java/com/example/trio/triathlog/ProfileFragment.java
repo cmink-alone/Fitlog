@@ -5,14 +5,20 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.trio.triathlog.database.TriathlogDbHelper;
@@ -26,7 +32,6 @@ import java.util.Date;
 public class ProfileFragment extends Fragment {
     private Profile profile;
     private Calendar birthdayCalendar = Calendar.getInstance();
-    private ImageView profile_pict;
     private EditText name_input;
     private EditText move_minute_input;
     private EditText move_distance_input;
@@ -34,6 +39,7 @@ public class ProfileFragment extends Fragment {
     private EditText birthday_input;
     private EditText weight_input;
     private EditText height_input;
+    private CollapsingToolbarLayout toolbar_layout;
 
     public ProfileFragment() {}
 
@@ -51,7 +57,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Profile");
+
+        toolbar_layout = getActivity().findViewById(R.id.toolbar_layout);
+
+        toolbar_layout.setTitle("Profile");
 
         profile = TriathlogDbHelper.getInstance(getActivity()).getProfile(1);
 
@@ -62,9 +71,6 @@ public class ProfileFragment extends Fragment {
         birthday_input = getActivity().findViewById(R.id.birthday_input);
         weight_input = getActivity().findViewById(R.id.weight_input);
         height_input = getActivity().findViewById(R.id.height_input);
-        profile_pict = getActivity().findViewById(R.id.profile_pict);
-
-        Glide.with(this).load(R.drawable.profile).into(profile_pict);
 
         birthday_input.setOnClickListener(new View.OnClickListener() {
             @Override

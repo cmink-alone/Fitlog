@@ -2,13 +2,18 @@ package com.example.trio.triathlog;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +40,8 @@ public class DetailActivity extends AppCompatActivity {
     TextView calories;
     TextView speed;
 
+    private Toolbar toolbar_detail;
+
     Activity activity;
 
     private void populateData(Activity activity){
@@ -50,7 +57,10 @@ public class DetailActivity extends AppCompatActivity {
         Type type = TriathlogDbHelper.getInstance(this).getType(activity.getType_id());
         Profile profile = TriathlogDbHelper.getInstance(this).getProfile(1);
 
-        title.setText(activity.getTitle());
+        //title.setText(activity.getTitle());
+
+        setTitle(activity.getTitle());
+
         icon_activity.setImageResource(type.getIcon());
         date.setText(Util.calendarToStringFriendly(calendar, pattern) + ", " + Util.calendarToString(calendar, "HH:mm") + " - " + Util.calendarToString(calendar2, "HH:mm"));
         move_time.setText(activity.getHour() +"hr " + activity.getMinute() + "min");
@@ -66,9 +76,22 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("");
 
+
+        Window window = getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.white));
+
+        toolbar_detail = findViewById(R.id.toolbar_detail);
+        setSupportActionBar(toolbar_detail);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //finding views
         title = findViewById(R.id.title);
         icon_activity = findViewById(R.id.icon_activity);
