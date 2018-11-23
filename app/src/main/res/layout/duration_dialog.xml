@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:text="SELECT DURATION"
+        android:fontFamily="@font/poppins_medium"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.333">
+
+            <com.example.trio.triathlog.view.MyNumberPicker
+                android:id="@+id/hour"
+                max="240"
+                min="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:text="h" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.333">
+
+            <com.example.trio.triathlog.view.MyNumberPicker
+                android:id="@+id/minute"
+                max="60"
+                min="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:text="m" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.333">
+
+            <com.example.trio.triathlog.view.MyNumberPicker
+                android:id="@+id/second"
+                max="60"
+                min="0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:text="s" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/dialogButtonOk"
+        android:background="@color/colorAccent"
+        android:textColor="#FFF"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/poppins_medium"
+        android:layout_height="wrap_content"
+        android:text="OK" />
+</LinearLayout>

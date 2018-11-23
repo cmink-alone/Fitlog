@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="#444"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Thu, 23 Aug" />
+
+    <TextView
+        android:id="@+id/minutes_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="#444"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="120 min" />
+
+    <TextView
+        android:id="@+id/distance_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="#444"
+        app:layout_constraintBaseline_toBaselineOf="@id/minutes_total"
+        app:layout_constraintRight_toLeftOf="@id/minutes_total"
+        tools:text="40 km" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/date"
+        app:layout_constraintTop_toBottomOf="@id/date"
+        android:background="#DDD" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/line"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/bike"
+            android:tint="#666" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/icon"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@id/icon"
+            android:textColor="#666"
+            android:textSize="12sp"
+            tools:text="13:02" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/icon"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="#444"
+            tools:text="Afternoon Cycling" />
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:textColor="#666"
+            android:textSize="13sp"
+            tools:text="10 min" />
+
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/duration"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@id/duration"
+            android:textColor="#666"
+            android:textSize="13sp"
+            tools:text="21 km" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

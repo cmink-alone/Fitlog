@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".HomeFragment">
+
+    <RelativeLayout
+        android:id="@+id/move_minute_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/move_distance_wrapper"
+        tools:layout_editor_absoluteY="0dp">
+
+        <TextView
+            android:id="@+id/move_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="22"
+            android:textColor="#222"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/divider_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/move_minutes"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@id/move_minutes"
+            android:fontFamily="@font/poppins_medium"
+            android:text="/"
+            android:textColor="#888"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/target_move_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/move_minutes"
+            android:layout_toEndOf="@id/divider_min"
+            android:fontFamily="@font/poppins_medium"
+            android:text="60"
+            android:textColor="#888"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/move_minutes"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="-13dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Move Min"
+            android:textColor="#666"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/move_distance_wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@id/move_minute_wrapper"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/move_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="5"
+            android:textColor="#222"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/divider_dis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/move_distance"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@id/move_distance"
+            android:fontFamily="@font/poppins_medium"
+            android:text="/"
+            android:textColor="#888"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/target_move_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/move_distance"
+            android:layout_toEndOf="@id/divider_dis"
+            android:fontFamily="@font/poppins_medium"
+            android:text="10"
+            android:textColor="#888"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/move_distance"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="-13dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Move Min"
+            android:textColor="#666"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
