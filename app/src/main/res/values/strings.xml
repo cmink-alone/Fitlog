@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Triathlog</string>
+    <string name="app_name">Fitlog</string>
     <string-array name="activity_categories">
         <item>Running</item>
         <item>Cycling</item>

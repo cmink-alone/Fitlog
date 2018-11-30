@@ -9,12 +9,13 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.constraint.ConstraintLayout
+            android:padding="24dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:id="@+id/move_minute_wrapper"
@@ -122,6 +123,23 @@
                     android:textColor="#666"
                     android:textSize="12sp" />
             </RelativeLayout>
+
+            <TextView
+                android:layout_marginTop="32dp"
+                android:id="@+id/label_weight"
+                app:layout_constraintTop_toBottomOf="@id/move_minute_wrapper"
+                android:text="Weight"
+                android:textColor="#222"
+                android:fontFamily="@font/poppins_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.jjoe64.graphview.GraphView
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/label_weight"
+                android:layout_width="match_parent"
+                android:layout_height="150dip"
+                app:seriesType="bar"
+                android:id="@+id/graph" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 

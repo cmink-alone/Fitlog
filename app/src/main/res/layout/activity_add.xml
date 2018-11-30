@@ -4,16 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFF"
     android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_height="wrap_content">
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:padding="16dp"
             android:stretchColumns="*"
             tools:context=".AddActivity">
