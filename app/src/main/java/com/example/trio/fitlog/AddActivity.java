@@ -15,17 +15,26 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.example.trio.fitlog.api.ApiClient;
+import com.example.trio.fitlog.api.ApiService;
 import com.example.trio.fitlog.database.SqliteDbHelper;
 import com.example.trio.fitlog.model.Activity;
+import com.example.trio.fitlog.model.ApiResponse;
 import com.example.trio.fitlog.model.Type;
+import com.example.trio.fitlog.utils.PreferencesHelper;
 import com.example.trio.fitlog.utils.Util;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddActivity extends AppCompatActivity {
     EditText title;
@@ -38,11 +47,17 @@ public class AddActivity extends AppCompatActivity {
     EditText time;
     EditText desc;
     Calendar myCalendar;
+
+    ProgressBar progressBar;
+
     MenuItem save;
     Activity activity;
 
     private Toolbar toolbar_detail;
     boolean isAdd = true;
+
+    PreferencesHelper preferencesHelper;
+    ApiService apiService;
 
     public void populateData(Activity activity){
         title.setText(activity.getTitle());
@@ -57,7 +72,11 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+        preferencesHelper = new PreferencesHelper(getApplicationContext());
+        apiService = ApiClient.getService(getApplicationContext());
+
         toolbar_detail = findViewById(R.id.toolbar_detail);
+
         setSupportActionBar(toolbar_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -74,6 +93,7 @@ public class AddActivity extends AppCompatActivity {
         date = findViewById(R.id.date_input);
         time = findViewById(R.id.time_input);
         desc = findViewById(R.id.desc_input);
+        progressBar = findViewById(R.id.progress_horizontal);
 
         //isntance Calendar
         myCalendar = Calendar.getInstance();
@@ -190,27 +210,80 @@ public class AddActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.save:
+                progressBar.setVisibility(View.VISIBLE);
+
                 Type selectedType = (Type) type.getSelectedItem();
                 activity.setTitle(title.getText().toString());
+                activity.setUser_id(preferencesHelper.getUserId());
                 activity.setType_id(selectedType.getId());
                 activity.setDistance(Integer.parseInt(distance.getText().toString()));
                 activity.setHour(Integer.parseInt(hour.getText().toString()));
                 activity.setMinute(Integer.parseInt(minute.getText().toString()));
                 activity.setDatetime(Util.calendarToString(myCalendar, "yyyy-MM-dd HH:mm"));
                 activity.setDescription(desc.getText().toString());
-                if(isAdd) {
-                    SqliteDbHelper.getInstance(this).insertActivity(activity);
-                } else {
-                    SqliteDbHelper.getInstance(this).editActivity(activity);
+                if(Util.isConnected(getApplicationContext())){
+                    if(isAdd) {
+                        apiService.addActivity(
+                                activity.getId(),
+                                activity.getUser_id(),
+                                activity.getTitle(),
+                                activity.getDatetime(),
+                                activity.getType_id(),
+                                activity.getHour(),
+                                activity.getMinute(),
+                                activity.getDistance(),
+                                activity.getDescription()).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    int id = Integer.parseInt(response.body().getMessage());
+                                    activity.setId(id);
+                                    SqliteDbHelper.getInstance(getApplicationContext()).insertActivity(activity);
+                                }
+                                progressBar.setVisibility(View.INVISIBLE);
+                                finish();
+                            }
 
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
 
-                    Intent add_activity = new Intent(getApplicationContext(), AddActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Activity", activity);
-                    add_activity.putExtras(bundle);
-                    setResult(RESULT_OK, add_activity);
+                            }
+                        });
+
+                    } else {
+                        apiService.updateActivity(
+                                activity.getId(),
+                                activity.getUser_id(),
+                                activity.getTitle(),
+                                activity.getDatetime(),
+                                activity.getType_id(),
+                                activity.getHour(),
+                                activity.getMinute(),
+                                activity.getDistance(),
+                                activity.getDescription()).enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()) {
+                                    SqliteDbHelper.getInstance(getApplicationContext()).editActivity(activity);
+                                }
+                                progressBar.setVisibility(View.INVISIBLE);
+
+                                Intent add_activity = new Intent(getApplicationContext(), AddActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("Activity", activity);
+                                add_activity.putExtras(bundle);
+                                setResult(RESULT_OK, add_activity);
+
+                                finish();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+                            }
+                        });
+                    }
                 }
-                finish();
                 return true;
 
                 default:

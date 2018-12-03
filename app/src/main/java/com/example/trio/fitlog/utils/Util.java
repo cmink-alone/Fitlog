@@ -1,6 +1,8 @@
 package com.example.trio.fitlog.utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.SupportActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.Window;
@@ -68,5 +70,13 @@ public class Util {
 
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(activity,R.color.white));
+    }
+
+    public static boolean isConnected(Context context){
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return  activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 }

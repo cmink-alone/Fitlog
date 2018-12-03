@@ -5,6 +5,7 @@ import android.provider.BaseColumns;
 
 public class ActivityContract implements BaseColumns {
     public static final String TABLE_NAME = "activities";
+    public static final String TEMP_TABLE_NAME = "temp_activities";
     public static final String COLUMN_USER_ID = "user_id";
     public static final String COLUMN_TYPE_ID = "type_id";
     public static final String COLUMN_TITLE = "title";

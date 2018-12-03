@@ -42,11 +42,11 @@
                 android:layout_marginRight="16dp">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/title_input"
+                    android:id="@+id/name_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
-                    android:hint="Name" />
+                    android:hint="Full Name" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -58,7 +58,7 @@
                 android:layout_marginRight="16dp">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/date_input"
+                    android:id="@+id/birthday_reg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
@@ -174,6 +174,17 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+            <ProgressBar
+                android:id="@+id/progress_horizontal"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="-7dp"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorPrimary"
+                android:max="100"
+                android:visibility="invisible" />
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView register;
     ProgressBar progressBar;
 
+    ApiService apiService;
     PreferencesHelper preferencesHelper;
 
     @Override
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Util.whiteStatusBar(this);
         preferencesHelper = new PreferencesHelper(this);
+        apiService = ApiClient.getService(getApplicationContext());
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -54,9 +56,8 @@ public class LoginActivity extends AppCompatActivity {
                 btnLogin.setEnabled(false);
                 progressBar.setVisibility(View.VISIBLE);
 
-                final ApiService apiService = ApiClient.getService(getApplicationContext());
                 apiService.login(username.getText().toString(),password.getText().toString())
-                        .enqueue(new LoginCallback(apiService));
+                        .enqueue(new LoginCallback());
             }
         });
 
@@ -74,12 +75,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     class LoginCallback implements Callback<Auth>{
-        ApiService apiService;
-
-        public LoginCallback(ApiService apiService) {
-            this.apiService = apiService;
-        }
-
         @Override
         public void onResponse(Call<Auth> call, Response<Auth> response) {
             if(response.isSuccessful()){
@@ -106,8 +101,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     class UserCallback implements Callback<List<Profile>> {
-        ApiService apiService;
-
         @Override
         public void onResponse(Call<List<Profile>> call, Response<List<Profile>> response) {
             if(response.isSuccessful()) {
@@ -123,15 +116,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-    class ActivityCallback implements Callback<List<Activity>> {
-        ApiService apiService;
-
+    public class ActivityCallback implements Callback<List<Activity>> {
         @Override
         public void onResponse(Call<List<Activity>> call, Response<List<Activity>> response) {
             if(response.isSuccessful()) {
                 List<Activity> activities = response.body();
-                Log.d("ACTIVITIES", activities.get(0).getTitle());
                 SqliteDbHelper.getInstance(getApplicationContext()).insertActivities(activities);
                 Util.activitiesLoaded = true;
             }

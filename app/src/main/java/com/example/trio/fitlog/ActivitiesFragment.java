@@ -16,21 +16,33 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.trio.fitlog.adapter.ActivityAdapter;
+import com.example.trio.fitlog.api.ApiClient;
+import com.example.trio.fitlog.api.ApiService;
 import com.example.trio.fitlog.database.SqliteDbHelper;
 import com.example.trio.fitlog.model.Activity;
+import com.example.trio.fitlog.utils.Util;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ActivitiesFragment extends Fragment {
     private FloatingActionButton fab;
     private Toolbar toolbar_detail;
     private RecyclerView activity_list;
+    private ProgressBar progressBar;
+
     public ActivityAdapter adapter;
     public List<Activity> activityList;
     public ActivitiesFragment() {}
+
+    ApiService apiService;
 
     public static ActivitiesFragment newInstance() {
         ActivitiesFragment fragment = new ActivitiesFragment();
@@ -42,7 +54,7 @@ public class ActivitiesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         activityList = SqliteDbHelper.getInstance(getActivity()).getAllActivity();
-
+        apiService = ApiClient.getService(getContext());
     }
 
     @Override
@@ -60,8 +72,10 @@ public class ActivitiesFragment extends Fragment {
         getActivity().setTitle("Activities");
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar_detail);
 
-        activity_list = getActivity().findViewById(R.id.activity_list);
-        fab = getActivity().findViewById(R.id.fab_add_activity);
+        activity_list = view.findViewById(R.id.activity_list);
+        fab = view.findViewById(R.id.fab_add_activity);
+        progressBar = view.findViewById(R.id.progress_horizontal);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,6 +106,26 @@ public class ActivitiesFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sync:
+                progressBar.setVisibility(View.VISIBLE);
+                apiService.getAllActivity().enqueue(
+                        new Callback<List<Activity>>() {
+                            @Override
+                            public void onResponse(Call<List<Activity>> call, Response<List<Activity>> response) {
+                                List<Activity> activities = response.body();
+                                SqliteDbHelper.getInstance(getContext()).insertActivities(activities);
+                                Util.activitiesLoaded = true;
+                                activityList = SqliteDbHelper.getInstance(getActivity()).getAllActivity();
+                                adapter.setItems(activityList);
+                                adapter.notifyDataSetChanged();
+                                progressBar.setVisibility(View.INVISIBLE);
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<Activity>> call, Throwable t) {
+
+                            }
+                        }
+                );
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

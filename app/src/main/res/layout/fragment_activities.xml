@@ -8,10 +8,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/activity_list"
-        tools:listitem="@layout/activity_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/activity_item">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -22,7 +22,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/plus"
-        android:tint="#FFF"/>
+        android:tint="#FFF" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -47,6 +47,17 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+            <ProgressBar
+                android:id="@+id/progress_horizontal"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="-7dp"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorPrimary"
+                android:max="100"
+                android:visibility="invisible" />
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 </android.support.design.widget.CoordinatorLayout>
