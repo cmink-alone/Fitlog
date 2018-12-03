@@ -111,6 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
                 return true;
             case R.id.save:
                 if(password_input.getText().toString().equals(repassword_input.getText().toString())) {
+                    progressBar.setVisibility(View.VISIBLE);
                     apiService.register(
                             username_input.getText().toString(),
                             password_input.getText().toString(),
@@ -118,8 +119,6 @@ public class RegisterActivity extends AppCompatActivity {
                             Util.calendarToString(birthdayCalendar, "yyyy-MM-dd"),
                             gender_input.getText().toString()
                     ).enqueue(new RegisterCallback());
-
-                    Toast.makeText(this, "Register Success", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Password and Re-password is not correct", Toast.LENGTH_SHORT).show();
                 }
@@ -134,13 +133,15 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<Auth> call, Response<Auth> response) {
             if (response.isSuccessful()) {
+                Toast.makeText(RegisterActivity.this, "Register Success", Toast.LENGTH_SHORT).show();
                 Profile profile = response.body().getUser();
-                preferencesHelper.setUserLogin(profile, response.body().getMessage());
-                Intent main = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(main);
+
+                Intent login = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(login);
                 finish();
+            } else {
+                Toast.makeText(RegisterActivity.this, "Register failed", Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(RegisterActivity.this, "Register failed", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.INVISIBLE);
         }
 

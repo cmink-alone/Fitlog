@@ -41,7 +41,11 @@ public class LoginActivity extends AppCompatActivity {
 
         Util.whiteStatusBar(this);
         preferencesHelper = new PreferencesHelper(this);
+
         apiService = ApiClient.getService(getApplicationContext());
+        if(!preferencesHelper.getToken().equals("")){
+            loginSuccess();
+        }
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -70,8 +74,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void loadAllData(){
+    public void loginSuccess(){
+        apiService.getAllUser().enqueue(new UserCallback());
+        apiService.getAllActivity().enqueue(new ActivityCallback());
 
+        Intent main = new Intent(LoginActivity.this, MainActivity.class);
+        LoginActivity.this.startActivity(main);
+        finish();
     }
 
     class LoginCallback implements Callback<Auth>{
@@ -82,12 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 preferencesHelper.setUserLogin(auth.getUser(), auth.getMessage());
 
-                apiService.getAllUser().enqueue(new UserCallback());
-                apiService.getAllActivity().enqueue(new ActivityCallback());
-
-                Intent main = new Intent(LoginActivity.this, MainActivity.class);
-                LoginActivity.this.startActivity(main);
-                finish();
+                loginSuccess();
             }
             btnLogin.setEnabled(true);
             progressBar.setVisibility(View.INVISIBLE);
