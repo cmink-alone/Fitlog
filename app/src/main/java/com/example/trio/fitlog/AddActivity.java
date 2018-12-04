@@ -3,9 +3,11 @@ package com.example.trio.fitlog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.trio.fitlog.api.ApiClient;
 import com.example.trio.fitlog.api.ApiService;
@@ -55,9 +58,11 @@ public class AddActivity extends AppCompatActivity {
 
     private Toolbar toolbar_detail;
     boolean isAdd = true;
+    boolean pushSuccess = false;
 
     PreferencesHelper preferencesHelper;
     ApiService apiService;
+    SqliteDbHelper sqliteDbHelper;
 
     public void populateData(Activity activity){
         title.setText(activity.getTitle());
@@ -72,6 +77,7 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+        sqliteDbHelper = SqliteDbHelper.getInstance(this);
         preferencesHelper = new PreferencesHelper(getApplicationContext());
         apiService = ApiClient.getService(getApplicationContext());
 
@@ -203,10 +209,29 @@ public class AddActivity extends AppCompatActivity {
         return true;
     }
 
+    private void setResult(){
+        Intent add_activity = new Intent(AddActivity.this, AddActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Activity", activity);
+        add_activity.putExtras(bundle);
+        setResult(RESULT_OK, add_activity);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!isAdd) {
+            setResult();
+        }
+        super.onBackPressed();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+                if (!isAdd) {
+                    setResult();
+                }
                 finish();
                 return true;
             case R.id.save:
@@ -221,10 +246,11 @@ public class AddActivity extends AppCompatActivity {
                 activity.setMinute(Integer.parseInt(minute.getText().toString()));
                 activity.setDatetime(Util.calendarToString(myCalendar, "yyyy-MM-dd HH:mm"));
                 activity.setDescription(desc.getText().toString());
-                if(Util.isConnected(getApplicationContext())){
-                    if(isAdd) {
+                if(isAdd) {
+                    activity.setFlag_insert(1);
+                    if(Util.isConnected(this)) {
                         apiService.addActivity(
-                                activity.getId(),
+                                activity.getServer_id(),
                                 activity.getUser_id(),
                                 activity.getTitle(),
                                 activity.getDatetime(),
@@ -237,22 +263,41 @@ public class AddActivity extends AppCompatActivity {
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                                 if (response.isSuccessful()) {
                                     int id = Integer.parseInt(response.body().getMessage());
-                                    activity.setId(id);
-                                    SqliteDbHelper.getInstance(getApplicationContext()).insertActivity(activity);
+                                    activity.setServer_id(id);
+                                    activity.setFlag_insert(0);
+                                    pushSuccess = true;
+                                } else {
+                                    pushSuccess = false;
+                                }
+                                if (!pushSuccess) {
+                                    Toast.makeText(AddActivity.this, "Failed to push, saved locally", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(AddActivity.this, "Success create new activity", Toast.LENGTH_SHORT).show();
                                 }
                                 progressBar.setVisibility(View.INVISIBLE);
+                                SqliteDbHelper.getInstance(getApplicationContext()).insertActivity(activity);
                                 finish();
                             }
 
                             @Override
                             public void onFailure(Call<ApiResponse> call, Throwable t) {
-
+                                Toast.makeText(AddActivity.this, "Failed to push, saved locally", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.INVISIBLE);
+                                SqliteDbHelper.getInstance(getApplicationContext()).insertActivity(activity);
+                                finish();
                             }
                         });
-
                     } else {
+                        Toast.makeText(AddActivity.this, "Failed to push, saved locally", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        SqliteDbHelper.getInstance(getApplicationContext()).insertActivity(activity);
+                        finish();
+                    }
+                } else {
+                    activity.setFlag_update(1);
+                    if(Util.isConnected(this)) {
                         apiService.updateActivity(
-                                activity.getId(),
+                                activity.getServer_id(),
                                 activity.getUser_id(),
                                 activity.getTitle(),
                                 activity.getDatetime(),
@@ -260,28 +305,37 @@ public class AddActivity extends AppCompatActivity {
                                 activity.getHour(),
                                 activity.getMinute(),
                                 activity.getDistance(),
-                                activity.getDescription()).enqueue(new Callback<ApiResponse>() {
+                                activity.getDescription(),
+                                activity.getFlag_delete()).enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                                 if (response.isSuccessful()) {
-                                    SqliteDbHelper.getInstance(getApplicationContext()).editActivity(activity);
+                                    activity.setFlag_update(0);
+                                    pushSuccess = true;
+                                } else {
+                                    pushSuccess = false;
                                 }
                                 progressBar.setVisibility(View.INVISIBLE);
-
-                                Intent add_activity = new Intent(getApplicationContext(), AddActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("Activity", activity);
-                                add_activity.putExtras(bundle);
-                                setResult(RESULT_OK, add_activity);
-
+                                sqliteDbHelper.editActivity(activity);
+                                setResult();
                                 finish();
                             }
 
                             @Override
                             public void onFailure(Call<ApiResponse> call, Throwable t) {
-
+                                Toast.makeText(AddActivity.this, "Failed to push, updated locally", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.INVISIBLE);
+                                sqliteDbHelper.editActivity(activity);
+                                setResult();
+                                finish();
                             }
                         });
+                    } else {
+                        Toast.makeText(AddActivity.this, "Failed to push, updated locally", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                        sqliteDbHelper.editActivity(activity);
+                        setResult();
+                        finish();
                     }
                 }
                 return true;

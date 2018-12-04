@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,13 +18,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.trio.fitlog.adapter.ActivityAdapter;
 import com.example.trio.fitlog.api.ApiClient;
 import com.example.trio.fitlog.api.ApiService;
 import com.example.trio.fitlog.database.SqliteDbHelper;
 import com.example.trio.fitlog.model.Activity;
+import com.example.trio.fitlog.model.ApiResponse;
 import com.example.trio.fitlog.utils.Util;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -42,6 +46,8 @@ public class ActivitiesFragment extends Fragment {
     public List<Activity> activityList;
     public ActivitiesFragment() {}
 
+    SqliteDbHelper sqliteDbHelper;
+
     ApiService apiService;
 
     public static ActivitiesFragment newInstance() {
@@ -55,6 +61,7 @@ public class ActivitiesFragment extends Fragment {
         setHasOptionsMenu(true);
         activityList = SqliteDbHelper.getInstance(getActivity()).getAllActivity();
         apiService = ApiClient.getService(getContext());
+        sqliteDbHelper = SqliteDbHelper.getInstance(getActivity());
     }
 
     @Override
@@ -91,7 +98,7 @@ public class ActivitiesFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        activityList = SqliteDbHelper.getInstance(getActivity()).getAllActivity();
+        activityList = sqliteDbHelper.getAllActivity();
         adapter.setItems(activityList);
         adapter.notifyDataSetChanged();
     }
@@ -106,26 +113,82 @@ public class ActivitiesFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sync:
-                progressBar.setVisibility(View.VISIBLE);
-                apiService.getAllActivity().enqueue(
-                        new Callback<List<Activity>>() {
-                            @Override
-                            public void onResponse(Call<List<Activity>> call, Response<List<Activity>> response) {
-                                List<Activity> activities = response.body();
-                                SqliteDbHelper.getInstance(getContext()).insertActivities(activities);
-                                Util.activitiesLoaded = true;
-                                activityList = SqliteDbHelper.getInstance(getActivity()).getAllActivity();
-                                adapter.setItems(activityList);
-                                adapter.notifyDataSetChanged();
-                                progressBar.setVisibility(View.INVISIBLE);
-                            }
+                if(Util.isConnected(getActivity())) {
+                    progressBar.setVisibility(View.VISIBLE);
 
-                            @Override
-                            public void onFailure(Call<List<Activity>> call, Throwable t) {
+                    List<Activity> activitiesPushInsert = sqliteDbHelper.getAllActivityPushInsert();
+                    final List<Activity> activitiesPushUpdate = sqliteDbHelper.getAllActivityPushUpdate();
 
+                    Log.e("order", new Gson().toJson(activitiesPushInsert));
+                    Log.e("order", new Gson().toJson(activitiesPushUpdate));
+
+                    apiService.addSyncActivity(new Gson().toJson(activitiesPushInsert)).enqueue(
+                            new Callback<List<Activity>>() {
+                                @Override
+                                public void onResponse(Call<List<Activity>> call, Response<List<Activity>> response) {
+                                    if (response.isSuccessful()) {
+                                        List<Activity> activities = response.body();
+                                        sqliteDbHelper.editActivities(activities);
+                                        Toast.makeText(getActivity(), "Sync insert success", Toast.LENGTH_SHORT).show();
+                                    } else {
+
+                                    }
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                }
+
+                                @Override
+                                public void onFailure(Call<List<Activity>> call, Throwable t) {
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                }
                             }
-                        }
-                );
+                    );
+
+                    apiService.updateSyncActivity(new Gson().toJson(activitiesPushUpdate)).enqueue(
+                            new Callback<ApiResponse>() {
+                                @Override
+                                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                    if (response.isSuccessful()) {
+                                        Toast.makeText(getActivity(), "Sync update success", Toast.LENGTH_SHORT).show();
+                                        apiService.getAllActivity().enqueue(
+                                                new Callback<List<Activity>>() {
+                                                    @Override
+                                                    public void onResponse(Call<List<Activity>> call, Response<List<Activity>> response) {
+                                                        List<Activity> activities = response.body();
+                                                        SqliteDbHelper.getInstance(getContext()).insertActivities(activities);
+                                                        Util.activitiesLoaded = true;
+                                                        activityList = SqliteDbHelper.getInstance(getActivity()).getAllActivity();
+                                                        adapter.setItems(activityList);
+                                                        adapter.notifyDataSetChanged();
+                                                        Toast.makeText(getActivity(), "All activites loaded", Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<List<Activity>> call, Throwable t) {
+
+                                                    }
+                                                }
+                                        );
+                                    } else {
+
+                                    }
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                }
+
+                                @Override
+                                public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                    );
+
+                } else {
+                    List<Activity> activitiesPushInsert = sqliteDbHelper.getAllActivityPushInsert();
+                    final List<Activity> activitiesPushUpdate = sqliteDbHelper.getAllActivityPushUpdate();
+
+                    Log.e("order", new Gson().toJson(activitiesPushInsert));
+                    Log.e("order", new Gson().toJson(activitiesPushUpdate));
+                    Toast.makeText(getActivity(), "Turn on internet to sync", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -109,7 +110,6 @@ public class ProfileFragment extends Fragment {
         move_minute_input.setOnFocusChangeListener(new FocusChangeListener());
         move_distance_input.setOnFocusChangeListener(new FocusChangeListener());
         gender_input.setOnFocusChangeListener(new FocusChangeListener());
-        birthday_input.setOnFocusChangeListener(new FocusChangeListener());
         weight_input.setOnFocusChangeListener(new FocusChangeListener());
         height_input.setOnFocusChangeListener(new FocusChangeListener());
 
@@ -135,6 +135,8 @@ public class ProfileFragment extends Fragment {
         if(profile.getHeight()!=0) {
             height_input.setText(String.valueOf(profile.getHeight()));
         }
+        birthdayCalendar = Util.stringToCalendar(profile.getBirthday(), "yyyy-MM-dd");
+        birthday_input.setText(Util.calendarToString(birthdayCalendar, "dd MMM yyyy"));
     }
 
     class FocusChangeListener implements View.OnFocusChangeListener{
@@ -160,10 +162,6 @@ public class ProfileFragment extends Fragment {
                 }
                 if(!gender_input.getText().toString().equals(profile.getGender())) {
                     profile.setGender(gender_input.getText().toString());
-                    changed=true;
-                }
-                if(!birthday_input.getText().toString().equals(profile.getBirthday()) && !birthday_input.getText().toString().equals("")) {
-                    profile.setBirthday(Util.calendarToString(birthdayCalendar, "yyyy-MM-dd"));
                     changed=true;
                 }
                 if(!weight_input.getText().toString().equals("")) {

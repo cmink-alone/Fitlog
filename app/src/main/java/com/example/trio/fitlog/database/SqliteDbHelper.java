@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.ArrayMap;
+import android.util.Log;
 
 import com.example.trio.fitlog.R;
 import com.example.trio.fitlog.model.Activity;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SqliteDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 21;
+    public static final int DATABASE_VERSION = 24;
     public static final String DATABASE_NAME = "Fitlog.db";
     public static SqliteDbHelper instance;
 
@@ -54,7 +55,9 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
     //ACTIVITY
     public List<Activity> getAllActivity(){
         List<Activity> activities = new ArrayList<>();
-        String qry = "SELECT * FROM " + ActivityContract.TABLE_NAME + " ORDER BY " + ActivityContract.COLUMN_DATETIME + " DESC";
+        String qry = "SELECT * FROM " + ActivityContract.TABLE_NAME +
+                " WHERE " + ActivityContract.COLUMN_FLAG_DELETE + "!=1 " +
+                " ORDER BY " + ActivityContract.COLUMN_DATETIME + " DESC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(qry, null);
         if (cursor.moveToFirst()) {
@@ -63,12 +66,80 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
 
                 activity.setId(cursor.getInt(cursor.getColumnIndex(ActivityContract._ID)));
                 activity.setTitle(cursor.getString(cursor.getColumnIndex(ActivityContract.COLUMN_TITLE)));
+                activity.setServer_id(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_SERVER_ID)));
                 activity.setUser_id(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_USER_ID)));
                 activity.setType_id(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_TYPE_ID)));
                 activity.setDistance(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_DISTANCE)));
                 activity.setHour(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_HOUR)));
                 activity.setMinute(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_MINUTE)));
                 activity.setDatetime(cursor.getString(cursor.getColumnIndex(ActivityContract.COLUMN_DATETIME)));
+                activity.setFlag_delete(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_FLAG_DELETE)));
+
+                Type type = getType(activity.getType_id());
+
+                activity.setMet(type.getMet());
+                activity.setStep(type.getStep());
+
+                activities.add(activity);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return activities;
+    }
+
+    public List<Activity> getAllActivityPushInsert(){
+        List<Activity> activities = new ArrayList<>();
+        String qry = "SELECT * FROM " + ActivityContract.TABLE_NAME +
+                " WHERE "+ ActivityContract.COLUMN_FLAG_INSERT + "=1 ORDER BY " +
+                ActivityContract.COLUMN_DATETIME + " DESC";SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(qry, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Activity activity = new Activity();
+
+                activity.setId(cursor.getInt(cursor.getColumnIndex(ActivityContract._ID)));
+                activity.setTitle(cursor.getString(cursor.getColumnIndex(ActivityContract.COLUMN_TITLE)));
+                activity.setServer_id(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_SERVER_ID)));
+                activity.setUser_id(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_USER_ID)));
+                activity.setType_id(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_TYPE_ID)));
+                activity.setDistance(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_DISTANCE)));
+                activity.setHour(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_HOUR)));
+                activity.setMinute(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_MINUTE)));
+                activity.setDatetime(cursor.getString(cursor.getColumnIndex(ActivityContract.COLUMN_DATETIME)));
+                activity.setFlag_delete(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_FLAG_DELETE)));
+
+                Type type = getType(activity.getType_id());
+
+                activity.setMet(type.getMet());
+                activity.setStep(type.getStep());
+
+                activities.add(activity);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return activities;
+    }
+    public List<Activity> getAllActivityPushUpdate(){
+        List<Activity> activities = new ArrayList<>();
+        String qry = "SELECT * FROM " + ActivityContract.TABLE_NAME +
+                " WHERE "+ ActivityContract.COLUMN_FLAG_UPDATE + "=1 ORDER BY " +
+                ActivityContract.COLUMN_DATETIME + " DESC";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(qry, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Activity activity = new Activity();
+
+                activity.setId(cursor.getInt(cursor.getColumnIndex(ActivityContract._ID)));
+                activity.setTitle(cursor.getString(cursor.getColumnIndex(ActivityContract.COLUMN_TITLE)));
+                activity.setServer_id(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_SERVER_ID)));
+                activity.setUser_id(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_USER_ID)));
+                activity.setType_id(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_TYPE_ID)));
+                activity.setDistance(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_DISTANCE)));
+                activity.setHour(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_HOUR)));
+                activity.setMinute(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_MINUTE)));
+                activity.setDatetime(cursor.getString(cursor.getColumnIndex(ActivityContract.COLUMN_DATETIME)));
+                activity.setFlag_delete(cursor.getInt(cursor.getColumnIndex(ActivityContract.COLUMN_FLAG_DELETE)));
 
                 Type type = getType(activity.getType_id());
 
@@ -87,7 +158,9 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
         List<Activity> activities = new ArrayList<>();
         String qry = "SELECT SUM("+ActivityContract.COLUMN_DISTANCE+") as sum_distance," +
                 "SUM("+ActivityContract.COLUMN_HOUR+ "*60+" + ActivityContract.COLUMN_MINUTE +") as sum_minute " +
-                "FROM " + ActivityContract.TABLE_NAME + " WHERE date(" + ActivityContract.COLUMN_DATETIME + ")='" + date + "'";
+                "FROM " + ActivityContract.TABLE_NAME + " WHERE " +
+                ActivityContract.COLUMN_FLAG_DELETE + "!=1 AND " +
+                "date(" + ActivityContract.COLUMN_DATETIME + ")='" + date + "'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(qry, null);
 
@@ -109,6 +182,7 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(ActivityContract.COLUMN_TITLE, activity.getTitle());
+        values.put(ActivityContract.COLUMN_SERVER_ID, activity.getServer_id());
         values.put(ActivityContract.COLUMN_USER_ID, activity.getUser_id());
         values.put(ActivityContract.COLUMN_TYPE_ID, activity.getType_id());
         values.put(ActivityContract.COLUMN_DISTANCE, activity.getDistance());
@@ -116,6 +190,9 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
         values.put(ActivityContract.COLUMN_MINUTE, activity.getMinute());
         values.put(ActivityContract.COLUMN_DATETIME, activity.getDatetime());
         values.put(ActivityContract.COLUMN_DESCRIPTION, activity.getDescription());
+        values.put(ActivityContract.COLUMN_FLAG_INSERT, activity.getFlag_insert());
+        values.put(ActivityContract.COLUMN_FLAG_UPDATE, activity.getFlag_update());
+        values.put(ActivityContract.COLUMN_FLAG_DELETE, activity.getFlag_delete());
 
         long id = db.insert(ActivityContract.TABLE_NAME, null, values);
 
@@ -130,6 +207,7 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(ActivityContract._ID, activity.getId());
         values.put(ActivityContract.COLUMN_TITLE, activity.getTitle());
+        values.put(ActivityContract.COLUMN_SERVER_ID, activity.getServer_id());
         values.put(ActivityContract.COLUMN_USER_ID, activity.getUser_id());
         values.put(ActivityContract.COLUMN_TYPE_ID, activity.getType_id());
         values.put(ActivityContract.COLUMN_DISTANCE, activity.getDistance());
@@ -144,10 +222,11 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
 
         return id;
     }
+
     public void insertActivities(List<Activity> activities) {
         emptyActivity();
         for (Activity activity: activities) {
-            insertActivityId(activity);
+            insertActivity(activity);
         }
     }
 
@@ -156,17 +235,27 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(ActivityContract.COLUMN_TITLE, activity.getTitle());
+        values.put(ActivityContract.COLUMN_SERVER_ID, activity.getServer_id());
         values.put(ActivityContract.COLUMN_TYPE_ID, activity.getType_id());
         values.put(ActivityContract.COLUMN_DISTANCE, activity.getDistance());
         values.put(ActivityContract.COLUMN_HOUR, activity.getHour());
         values.put(ActivityContract.COLUMN_MINUTE, activity.getMinute());
         values.put(ActivityContract.COLUMN_DATETIME, activity.getDatetime());
         values.put(ActivityContract.COLUMN_DESCRIPTION, activity.getDescription());
+        values.put(ActivityContract.COLUMN_FLAG_INSERT, activity.getFlag_insert());
+        values.put(ActivityContract.COLUMN_FLAG_UPDATE, activity.getFlag_update());
+        values.put(ActivityContract.COLUMN_FLAG_DELETE, activity.getFlag_delete());
 
         return db.update(ActivityContract.TABLE_NAME,  values,ActivityContract._ID + " = ?",
                 new String[]{String.valueOf(activity.getId())});
     }
 
+    public void editActivities(List<Activity> activities) {
+        emptyActivity();
+        for (Activity activity: activities) {
+            editActivity(activity);
+        }
+    }
 
     public void emptyActivity(){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -175,9 +264,9 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
     }
 
     public void deleteActivity(Activity activity) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(ActivityContract.TABLE_NAME,ActivityContract._ID + " = ?",
-                new String[]{String.valueOf(activity.getId())});
+        activity.setFlag_delete(1);
+        activity.setFlag_update(1);
+        editActivity(activity);
     }
 
     //PROFILE
@@ -228,7 +317,6 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
 
     public int editProfile(Profile profile) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(ProfileContract.COLUMN_NAME, profile.getName());
         values.put(ProfileContract.COLUMN_MOVE_MINUTES, profile.getMove_minutes());

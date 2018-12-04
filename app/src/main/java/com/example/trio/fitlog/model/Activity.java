@@ -6,6 +6,7 @@ import static java.lang.Math.round;
 
 public class Activity implements Serializable {
     private int id;
+    private int server_id;
     private int user_id;
     private int type_id;
     private String title;
@@ -17,6 +18,9 @@ public class Activity implements Serializable {
     private String description;
     private int met;
     private int step;
+    private int flag_insert;
+    private int flag_update;
+    private int flag_delete;
 
     public int getCaloriesBurned(Profile profile){
         return (int)(getTotalMinutes()*(met*3.5*profile.getWeight())/200);
@@ -135,5 +139,37 @@ public class Activity implements Serializable {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    public int getServer_id() {
+        return server_id;
+    }
+
+    public void setServer_id(int server_id) {
+        this.server_id = server_id;
+    }
+
+    public int getFlag_insert() {
+        return flag_insert;
+    }
+
+    public void setFlag_insert(int flag_insert) {
+        this.flag_insert = flag_insert;
+    }
+
+    public int getFlag_update() {
+        return flag_update;
+    }
+
+    public void setFlag_update(int flag_update) {
+        this.flag_update = flag_update;
+    }
+
+    public int getFlag_delete() {
+        return flag_delete;
+    }
+
+    public void setFlag_delete(int flag_delete) {
+        this.flag_delete = flag_delete;
     }
 }

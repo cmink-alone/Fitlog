@@ -50,6 +50,12 @@ public interface ApiService {
     );
 
     @FormUrlEncoded
+    @POST("activity/add/sync")
+    Call<List<Activity>> addSyncActivity(
+            @Field("activities") String activities
+    );
+
+    @FormUrlEncoded
     @POST("activity/update")
     Call<ApiResponse> updateActivity(
             @Field("id") int id,
@@ -60,6 +66,14 @@ public interface ApiService {
             @Field("hour") int hour,
             @Field("minute") int minute,
             @Field("distance") int distance,
-            @Field("description") String description
+            @Field("description") String description,
+            @Field("flag_delete") int flag_delete
+    );
+
+
+    @FormUrlEncoded
+    @POST("activity/update/sync")
+    Call<ApiResponse> updateSyncActivity(
+            @Field("activities") String activities
     );
 }

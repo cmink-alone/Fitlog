@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,7 +53,8 @@ public class DetailActivity extends AppCompatActivity {
 
         //title.setText(activity.getTitle());
 
-        setTitle(activity.getTitle());
+        Log.wtf("TITLE", activity.getTitle());
+        getSupportActionBar().setTitle(activity.getTitle());
 
         icon_activity.setImageResource(type.getIcon());
         date.setText(Util.calendarToStringFriendly(calendar, pattern) + ", " + Util.calendarToString(calendar, "HH:mm") + " - " + Util.calendarToString(calendar2, "HH:mm"));
@@ -138,4 +140,5 @@ public class DetailActivity extends AppCompatActivity {
 
         populateData(activity);
     }
+
 }
