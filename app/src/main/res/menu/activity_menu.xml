@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/sync"
-        android:enabled="true"
         android:title="Sync"
         app:showAsAction="ifRoom"
         android:icon="@drawable/sync"
         android:visible="true"
+        android:actionLayout="@layout/iv_sync"
         android:fontFamily="@font/poppins_medium"/>
 </menu>

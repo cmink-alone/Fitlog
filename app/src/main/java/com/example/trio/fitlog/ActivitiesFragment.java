@@ -1,6 +1,9 @@
 package com.example.trio.fitlog;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +20,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -35,6 +41,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.support.v4.content.ContextCompat.getColorStateList;
+import static android.support.v4.content.ContextCompat.getSystemService;
+
 
 public class ActivitiesFragment extends Fragment {
     private FloatingActionButton fab;
@@ -44,6 +53,9 @@ public class ActivitiesFragment extends Fragment {
 
     public ActivityAdapter adapter;
     public List<Activity> activityList;
+
+    MenuItem menuItem;
+
     public ActivitiesFragment() {}
 
     SqliteDbHelper sqliteDbHelper;
@@ -106,13 +118,16 @@ public class ActivitiesFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.activity_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sync:
+        LayoutInflater layoutInflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        ImageView iv = (ImageView) layoutInflater.inflate(R.layout.iv_sync, null);
+        menuItem = menu.findItem(R.id.sync).setActionView(iv);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.clockwise_animation);
+                rotation.setRepeatCount(Animation.INFINITE);
+                menuItem.getActionView().startAnimation(rotation);
+                ((ImageView)menuItem.getActionView()).setImageTintList(getActivity().getResources().getColorStateList(R.color.colorPrimaryDark));
                 if(Util.isConnected(getActivity())) {
                     progressBar.setVisibility(View.VISIBLE);
 
@@ -160,6 +175,8 @@ public class ActivitiesFragment extends Fragment {
                                                         adapter.setItems(activityList);
                                                         adapter.notifyDataSetChanged();
                                                         Toast.makeText(getActivity(), "All activites loaded", Toast.LENGTH_SHORT).show();
+                                                        menuItem.getActionView().clearAnimation();
+                                                        ((ImageView)menuItem.getActionView()).setImageTintList(getActivity().getResources().getColorStateList(R.color.black));
                                                     }
 
                                                     @Override
@@ -189,9 +206,8 @@ public class ActivitiesFragment extends Fragment {
                     Log.e("order", new Gson().toJson(activitiesPushUpdate));
                     Toast.makeText(getActivity(), "Turn on internet to sync", Toast.LENGTH_SHORT).show();
                 }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }
