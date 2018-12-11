@@ -8,6 +8,7 @@ import com.example.trio.fitlog.model.Profile;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -33,7 +34,7 @@ public interface ApiService {
     );
 
     @GET("activity/following")
-    Call<List<Activity>> getAllActivity();
+    Observable<List<Activity>> getAllActivity();
 
     @FormUrlEncoded
     @POST("activity/add")
@@ -51,7 +52,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("activity/add/sync")
-    Call<List<Activity>> addSyncActivity(
+    Observable<List<Activity>> addSyncActivity(
             @Field("activities") String activities
     );
 
@@ -73,7 +74,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("activity/update/sync")
-    Call<ApiResponse> updateSyncActivity(
+    Observable<ApiResponse> updateSyncActivity(
             @Field("activities") String activities
     );
 }

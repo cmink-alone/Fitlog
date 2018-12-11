@@ -157,7 +157,8 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
     public ArrayMap<String, Integer> getActivitySummary(String date){
         List<Activity> activities = new ArrayList<>();
         String qry = "SELECT SUM("+ActivityContract.COLUMN_DISTANCE+") as sum_distance," +
-                "SUM("+ActivityContract.COLUMN_HOUR+ "*60+" + ActivityContract.COLUMN_MINUTE +") as sum_minute " +
+                "SUM("+ActivityContract.COLUMN_HOUR+ "*60+" + ActivityContract.COLUMN_MINUTE +") as sum_minute," +
+                "COUNT("+ActivityContract._ID+ ") as count_activity " +
                 "FROM " + ActivityContract.TABLE_NAME + " WHERE " +
                 ActivityContract.COLUMN_FLAG_DELETE + "!=1 AND " +
                 "date(" + ActivityContract.COLUMN_DATETIME + ")='" + date + "'";
@@ -172,6 +173,7 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
         ArrayMap<String, Integer> summary = new ArrayMap<String, Integer>();
         summary.put("sum_distance", cursor.getInt(cursor.getColumnIndex("sum_distance")));
         summary.put("sum_minute", cursor.getInt(cursor.getColumnIndex("sum_minute")));
+        summary.put("count_activity", cursor.getInt(cursor.getColumnIndex("count_activity")));
         db.close();
 
         return summary;

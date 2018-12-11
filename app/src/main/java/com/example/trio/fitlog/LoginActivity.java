@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginSuccess(){
         apiService.getAllUser().enqueue(new UserCallback());
-        apiService.getAllActivity().enqueue(new ActivityCallback());
+        //apiService.getAllActivity().enqueue(new ActivityCallback());
 
         Intent main = new Intent(LoginActivity.this, MainActivity.class);
         LoginActivity.this.startActivity(main);
