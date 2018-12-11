@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment {
         sqliteDbHelper = SqliteDbHelper.getInstance(getContext());
         preferencesHelper = new PreferencesHelper(getContext());
         toolbar_layout = view.findViewById(R.id.toolbar_layout);
-        toolbar_layout.setTitle("Today");
+        toolbar_layout.setTitle("Activity Summary");
 
         activitySummary = sqliteDbHelper.getActivitySummary(Util.calendarToString(homeCalendar,"yyyy-MM-dd"));
         Profile profile = sqliteDbHelper.getProfile(preferencesHelper.getUserId());
