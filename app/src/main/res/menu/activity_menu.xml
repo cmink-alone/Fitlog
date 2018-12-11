@@ -8,5 +8,5 @@
         android:icon="@drawable/sync"
         android:visible="true"
         android:actionLayout="@layout/iv_sync"
-        android:fontFamily="@font/poppins_medium"/>
+        android:fontFamily="@font/poppins_light"/>
 </menu>

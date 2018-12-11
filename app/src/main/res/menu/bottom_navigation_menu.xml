@@ -7,7 +7,7 @@
         android:title="Home"
         android:icon="@drawable/home_variant_outline"
 
-        android:fontFamily="@font/poppins_medium"
+        android:fontFamily="@font/poppins_light"
         app:showAsAction="ifRoom"/>
 
     <item
@@ -15,13 +15,13 @@
         android:enabled="true"
         android:icon="@drawable/clipboard_text_outline"
         android:title="Activities"
-        android:fontFamily="@font/poppins_medium"
+        android:fontFamily="@font/poppins_light"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/nav_profile"
         android:enabled="true"
-        android:fontFamily="@font/poppins_medium"
+        android:fontFamily="@font/poppins_light"
         android:icon="@drawable/account_outline"
         android:title="Profile"
         app:showAsAction="ifRoom" />

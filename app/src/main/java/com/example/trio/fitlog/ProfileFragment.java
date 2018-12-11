@@ -192,6 +192,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.friend:
+                Intent follow = new Intent(getContext(), FollowActivity.class);
+                getActivity().startActivity(follow);
+                return true;
             case R.id.logout:
                 preferencesHelper.logout();
                 Toast.makeText(getContext(), "Logout success", Toast.LENGTH_SHORT).show();

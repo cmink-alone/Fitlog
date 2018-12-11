@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/friend"
+        android:enabled="true"
+        android:title="Friends"
+        android:fontFamily="@font/poppins_light"/>
+    <item
         android:id="@+id/logout"
         android:enabled="true"
         android:title="Logout"
-        android:fontFamily="@font/poppins_medium"/>
+        android:fontFamily="@font/poppins_light"/>
 </menu>

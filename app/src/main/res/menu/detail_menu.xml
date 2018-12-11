@@ -5,10 +5,10 @@
         android:id="@+id/edit"
         android:enabled="true"
         android:title="Edit"
-        android:fontFamily="@font/poppins_medium"/>
+        android:fontFamily="@font/poppins_light"/>
     <item
         android:id="@+id/delete"
         android:enabled="true"
         android:title="Delete"
-        android:fontFamily="@font/poppins_medium"/>
+        android:fontFamily="@font/poppins_light"/>
 </menu>

@@ -5,6 +5,6 @@
         android:id="@+id/save"
         android:enabled="true"
         android:title="SAVE"
-        android:fontFamily="@font/poppins_medium"
+        android:fontFamily="@font/poppins_light"
         app:showAsAction="ifRoom"/>
 </menu>
