@@ -18,6 +18,9 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
+    <style name="ToolbarText">
+        <item name="android:fontFamily">@font/poppins_medium</item>
     </style>
 </resources>

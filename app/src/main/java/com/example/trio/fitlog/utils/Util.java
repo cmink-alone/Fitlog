@@ -13,8 +13,10 @@ import com.example.trio.fitlog.model.Activity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class Util {
 
@@ -57,6 +59,20 @@ public class Util {
         } finally {
             return date;
         }
+    }
+
+    public static List<Integer> getDatesInMonth(Date date){
+        List<Integer> dates = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        int month=calendar.get(Calendar.MONTH);
+
+        while (month==calendar.get(Calendar.MONTH)) {
+            dates.add(calendar.get(Calendar.DATE));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        return dates;
     }
 
     public static void whiteStatusBar(SupportActivity activity){

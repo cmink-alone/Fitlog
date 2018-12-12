@@ -1,134 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".HomeFragment">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_detail"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FFF"
+        android:theme="@style/ToolbarTheme"
+        app:layout_collapseMode="pin"
+        app:contentInsetStartWithNavigation="0dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:itemCount="3"
+        tools:listitem="@layout/date_item" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <!--
-        <android.support.constraint.ConstraintLayout
-            android:padding="24dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <RelativeLayout
-                android:id="@+id/move_minute_wrapper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="@id/move_distance_wrapper"
-                tools:layout_editor_absoluteY="0dp">
-
-                <TextView
-                    android:id="@+id/move_minutes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="22"
-                    android:textColor="#222"
-                    android:textSize="32sp" />
-
-                <TextView
-                    android:id="@+id/divider_min"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/move_minutes"
-                    android:layout_marginStart="0dp"
-                    android:layout_toEndOf="@id/move_minutes"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="/"
-                    android:textColor="#888"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/target_move_minutes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/move_minutes"
-                    android:layout_toEndOf="@id/divider_min"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="60"
-                    android:textColor="#888"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/move_minutes"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="-13dp"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="Move Min"
-                    android:textColor="#666"
-                    android:textSize="12sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/move_distance_wrapper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintLeft_toLeftOf="@id/move_minute_wrapper"
-                app:layout_constraintRight_toRightOf="parent">
-
-                <TextView
-                    android:id="@+id/move_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="5"
-                    android:textColor="#222"
-                    android:textSize="32sp" />
-
-                <TextView
-                    android:id="@+id/divider_dis"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/move_distance"
-                    android:layout_marginStart="0dp"
-                    android:layout_toEndOf="@id/move_distance"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="/"
-                    android:textColor="#888"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/target_move_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/move_distance"
-                    android:layout_toEndOf="@id/divider_dis"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="10"
-                    android:textColor="#888"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/move_distance"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="-13dp"
-                    android:fontFamily="@font/poppins_medium"
-                    android:text="Move Min"
-                    android:textColor="#666"
-                    android:textSize="12sp" />
-            </RelativeLayout>
-        </android.support.constraint.ConstraintLayout>
-        -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+
             android:padding="16dp">
 
             <android.support.v7.widget.CardView
@@ -141,10 +50,10 @@
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingTop="8dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -209,10 +118,10 @@
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingTop="8dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -278,10 +187,10 @@
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingTop="8dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -307,29 +216,4 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="#FFF"
-        android:theme="@style/ThemeOverlay.AppCompat.Light">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="exitUntilCollapsed|scroll"
-            app:theme="@style/ToolbarTheme">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_detail"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="#FFF"
-                android:theme="@style/ToolbarTheme"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>
