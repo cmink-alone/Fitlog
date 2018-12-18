@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import io.reactivex.schedulers.Schedulers;
  * A simple {@link Fragment} subclass.
  */
 public class FollowersFragment extends Fragment {
+    ProgressBar progressBar;
     private RecyclerView listFollow;
     private List<Profile> followersList = new ArrayList<>();
 
@@ -45,7 +47,7 @@ public class FollowersFragment extends Fragment {
                 new Observer<List<Profile>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        progressBar.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -54,11 +56,12 @@ public class FollowersFragment extends Fragment {
                         adapter.setFollows(followersList);
                         adapter.notifyDataSetChanged();
                         //Toast.makeText(getContext(), "Loaded followers success", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
@@ -85,7 +88,6 @@ public class FollowersFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         apiService = ApiClient.getService(getContext());
-        loadFollowers();
     }
 
     @Override
@@ -97,10 +99,13 @@ public class FollowersFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        progressBar = view.findViewById(R.id.progress_circular);
         listFollow = view.findViewById(R.id.list_follow);
         adapter = new FollowAdapter(getContext(), followersList,2);
 
         listFollow.setAdapter(adapter);
         listFollow.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        loadFollowers();
     }
 }

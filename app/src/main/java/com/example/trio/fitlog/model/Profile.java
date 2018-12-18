@@ -11,20 +11,20 @@ public class Profile {
     private String birthday;
     private int weight;
     private int height;
-    private boolean followed;
+    private int followed;
 
-    public boolean isFollowed() {
+    public int isFollowed() {
         return followed;
     }
 
-    public void setFollowed(boolean followed) {
+    public void setFollowed(int followed) {
         this.followed = followed;
     }
 
     public Profile() {
     }
 
-    public Profile(int id, String name, int move_minutes, int move_distance, String gender, String birthday, int weight, int height, boolean followed) {
+    public Profile(int id, String name, int move_minutes, int move_distance, String gender, String birthday, int weight, int height, int followed) {
         this.id = id;
         this.name = name;
         this.move_minutes = move_minutes;

@@ -31,7 +31,7 @@ public interface ApiService {
     @GET("user/followers")
     Observable<List<Profile>> getUserFollowers();
 
-    @GET("follow")
+    @GET("follow/{id}")
     Observable<Integer> follow(@Path("id") int id);
 
     @GET("unfollow/{id}")

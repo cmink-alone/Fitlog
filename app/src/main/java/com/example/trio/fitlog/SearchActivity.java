@@ -11,6 +11,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -89,10 +90,13 @@ public class SearchActivity extends AppCompatActivity {
                     adapter.setFollows(profiles);
                     adapter.notifyDataSetChanged();
                     Toast.makeText(SearchActivity.this, "SUCCESS", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
 
                 @Override
                 public void onError(Throwable e) {
+                    Toast.makeText(SearchActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
 
                 }
 
@@ -118,4 +122,14 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

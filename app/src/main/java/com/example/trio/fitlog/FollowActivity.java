@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import com.example.trio.fitlog.utils.Util;
 
@@ -24,7 +25,6 @@ public class FollowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_follow);
 
         Util.whiteStatusBar(this);
-
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Friends");
@@ -57,6 +57,8 @@ public class FollowActivity extends AppCompatActivity {
 
             }
         });
+        TabLayout.Tab tab = follow_tab.getTabAt(0);
+        tab.select();
     }
 
     @Override

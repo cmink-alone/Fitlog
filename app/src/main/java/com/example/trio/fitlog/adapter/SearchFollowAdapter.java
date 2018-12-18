@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.trio.fitlog.R;
 import com.example.trio.fitlog.api.ApiClient;
@@ -17,7 +18,9 @@ import com.example.trio.fitlog.model.Profile;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchFollowAdapter extends RecyclerView.Adapter<SearchFollowAdapter.ViewHolder> {
@@ -46,7 +49,7 @@ public class SearchFollowAdapter extends RecyclerView.Adapter<SearchFollowAdapte
         Profile follow = follows.get(i);
         viewHolder.username.setText(follow.getUsername());
         viewHolder.name.setText(follow.getName());
-        if (follow.isFollowed()){
+        if (follow.isFollowed() == 1){
             viewHolder.button_follow.setText("Unfollow");
         } else {
             viewHolder.button_follow.setText("Follow");
@@ -78,13 +81,53 @@ public class SearchFollowAdapter extends RecyclerView.Adapter<SearchFollowAdapte
                         Observable<Integer> unfollow = apiService.unfollow(profile.getId())
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread());
-                        unfollow.subscribe();
+                        unfollow.subscribe(new Observer<Integer>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onNext(Integer integer) {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
                         button_follow.setText("Follow");
                     } else {
                         Observable<Integer> follow = apiService.follow(profile.getId())
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread());
-                        follow.subscribe();
+                        follow.subscribe(new Observer<Integer>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onNext(Integer integer) {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
                         button_follow.setText("Unfollow");
                     }
                 }
