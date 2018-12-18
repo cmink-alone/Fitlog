@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.trio.fitlog.api.ApiClient;
 import com.example.trio.fitlog.api.ApiService;
@@ -92,6 +93,9 @@ public class LoginActivity extends AppCompatActivity {
                 preferencesHelper.setUserLogin(auth.getUser(), auth.getMessage());
 
                 loginSuccess();
+                Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
             }
             btnLogin.setEnabled(true);
             progressBar.setVisibility(View.INVISIBLE);
@@ -101,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onFailure(Call<Auth> call, Throwable t) {
             btnLogin.setEnabled(true);
             progressBar.setVisibility(View.INVISIBLE);
+            Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -4,6 +4,7 @@ package com.example.trio.fitlog.api;
 import com.example.trio.fitlog.model.Activity;
 import com.example.trio.fitlog.model.ApiResponse;
 import com.example.trio.fitlog.model.Auth;
+import com.example.trio.fitlog.model.Follow;
 import com.example.trio.fitlog.model.Profile;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiService {
     @FormUrlEncoded
@@ -22,6 +24,24 @@ public interface ApiService {
 
     @GET("user/all")
     Call<List<Profile>> getAllUser();
+
+    @GET("user/following")
+    Observable<List<Profile>> getUserFollowing();
+
+    @GET("user/followers")
+    Observable<List<Profile>> getUserFollowers();
+
+    @GET("follow")
+    Observable<Integer> follow(@Path("id") int id);
+
+    @GET("unfollow/{id}")
+    Observable<Integer> unfollow(@Path("id") int id);
+
+    @GET("follow/search/{q}")
+    Observable<List<Profile>> search(@Path("q") String q);
+
+    @GET("follower/remove/{id}")
+    Observable<Integer> remove_follower(@Path("id") int id);
 
     @FormUrlEncoded
     @POST("register")

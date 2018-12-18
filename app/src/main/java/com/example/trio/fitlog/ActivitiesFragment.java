@@ -217,9 +217,6 @@ public class ActivitiesFragment extends Fragment {
                                     adapter.setItems(activityList);
                                     adapter.notifyDataSetChanged();
                                     Toast.makeText(getActivity(), "All activites loaded", Toast.LENGTH_SHORT).show();
-                                    menuItem.getActionView().clearAnimation();
-                                    ((ImageView)menuItem.getActionView()).setImageTintList(getActivity().getResources().getColorStateList(R.color.black));
-
                                 }
 
                                 @Override
@@ -229,7 +226,7 @@ public class ActivitiesFragment extends Fragment {
 
                                 @Override
                                 public void onComplete() {
-                                    progressBar.setVisibility(View.INVISIBLE);
+
                                 }
                             }
                     );
@@ -270,7 +267,7 @@ public class ActivitiesFragment extends Fragment {
 
                         }
                     });
-
+                    */
 
                     requests.add(addSync);
                     requests.add(editSync);
@@ -284,6 +281,11 @@ public class ActivitiesFragment extends Fragment {
                                     // Objects[] is an array of combined results of completed requests
 
                                     // do something with those results and emit new event
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    menuItem.getActionView().clearAnimation();
+                                    ((ImageView)menuItem.getActionView()).setImageTintList(getActivity().getResources().getColorStateList(R.color.black));
+
+                                    Toast.makeText(getContext(), "All Request is completed", Toast.LENGTH_SHORT).show();
                                     return new Object();
                                 }
                             })
@@ -305,7 +307,7 @@ public class ActivitiesFragment extends Fragment {
                                         }
                                     }
                             );
- */
+
                     /*
                     apiService.addSyncActivity(new Gson().toJson(activitiesPushInsert)).enqueue(
                             new Callback<List<Activity>>() {

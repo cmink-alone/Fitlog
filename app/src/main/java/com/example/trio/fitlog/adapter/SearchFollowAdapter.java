@@ -17,25 +17,20 @@ import com.example.trio.fitlog.model.Profile;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.internal.operators.single.SingleFlatMapIterableObservable;
 import io.reactivex.schedulers.Schedulers;
 
-public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder> {
+public class SearchFollowAdapter extends RecyclerView.Adapter<SearchFollowAdapter.ViewHolder> {
     Context context;
     List<Profile> follows;
-    int follow_state;
 
     public void setFollows(List<Profile> follows){
         this.follows = follows;
     }
 
-    public FollowAdapter(Context context, List<Profile> follows, int follow_state) {
+    public SearchFollowAdapter(Context context, List<Profile> follows) {
         this.context = context;
         this.follows = follows;
-        this.follow_state = follow_state;
     }
 
     @NonNull
@@ -47,11 +42,15 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FollowAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull SearchFollowAdapter.ViewHolder viewHolder, int i) {
         Profile follow = follows.get(i);
         viewHolder.username.setText(follow.getUsername());
         viewHolder.name.setText(follow.getName());
-        viewHolder.button_follow.setText("Remove");
+        if (follow.isFollowed()){
+            viewHolder.button_follow.setText("Unfollow");
+        } else {
+            viewHolder.button_follow.setText("Follow");
+        }
     }
 
     @Override
@@ -75,18 +74,18 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
                     Profile profile = follows.get(getAdapterPosition());
                     ApiService apiService = ApiClient.getService(context);
 
-                    follows.remove(getAdapterPosition());
-                    notifyDataSetChanged();
-                    if(follow_state==1){
+                    if(button_follow.getText().equals("Unfollow")){
                         Observable<Integer> unfollow = apiService.unfollow(profile.getId())
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread());
                         unfollow.subscribe();
+                        button_follow.setText("Follow");
                     } else {
-                        Observable<Integer> removeFollower = apiService.remove_follower(profile.getId())
+                        Observable<Integer> follow = apiService.follow(profile.getId())
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread());
-                        removeFollower.subscribe();
+                        follow.subscribe();
+                        button_follow.setText("Unfollow");
                     }
                 }
             });

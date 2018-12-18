@@ -1,5 +1,6 @@
 package com.example.trio.fitlog;
 
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trio.fitlog.adapter.FollowAdapter;
@@ -25,19 +27,21 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-
-public class FollowingFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class FollowersFragment extends Fragment {
     private RecyclerView listFollow;
-    private List<Profile> followingList = new ArrayList<>();
+    private List<Profile> followersList = new ArrayList<>();
 
     FollowAdapter adapter;
     private ApiService apiService;
 
-    public void loadFollowing(){
-        Observable<List<Profile>> getFollowing = apiService.getUserFollowing()
+    public void loadFollowers(){
+        Observable<List<Profile>> getFollowers = apiService.getUserFollowers()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
-        getFollowing.subscribe(
+        getFollowers.subscribe(
                 new Observer<List<Profile>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -46,10 +50,10 @@ public class FollowingFragment extends Fragment {
 
                     @Override
                     public void onNext(List<Profile> follows) {
-                        followingList = follows;
-                        adapter.setFollows(followingList);
+                        followersList = follows;
+                        adapter.setFollows(followersList);
                         adapter.notifyDataSetChanged();
-                        //Toast.makeText(getContext(), "Loaded following success", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), "Loaded followers success", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -65,22 +69,23 @@ public class FollowingFragment extends Fragment {
         );
     }
 
-    public FollowingFragment() {
-        // Required empty public constructor
-    }
 
-    public static FollowingFragment newInstance() {
-        FollowingFragment fragment = new FollowingFragment();
+    public static FollowersFragment newInstance() {
+        FollowersFragment fragment = new FollowersFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
+    public FollowersFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         apiService = ApiClient.getService(getContext());
-        loadFollowing();
+        loadFollowers();
     }
 
     @Override
@@ -93,9 +98,9 @@ public class FollowingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listFollow = view.findViewById(R.id.list_follow);
-        adapter = new FollowAdapter(getContext(), followingList, 1);
+        adapter = new FollowAdapter(getContext(), followersList,2);
+
         listFollow.setAdapter(adapter);
         listFollow.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
     }
 }

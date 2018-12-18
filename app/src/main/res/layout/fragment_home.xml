@@ -14,10 +14,9 @@
         android:layout_height="?attr/actionBarSize"
         android:background="#FFF"
         android:theme="@style/ToolbarTheme"
-        app:layout_collapseMode="pin"
         app:contentInsetStartWithNavigation="0dp"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-    </android.support.v7.widget.Toolbar>
+        app:layout_collapseMode="pin"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list_date"
@@ -54,6 +53,25 @@
                     android:paddingTop="8dp"
                     android:paddingRight="16dp"
                     android:paddingBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/desc_move_minute"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/white"
+                        app:layout_constraintLeft_toRightOf="@id/done_move_minute"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="Done"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/done_move_minute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_done_all"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -122,6 +140,25 @@
                     android:paddingTop="8dp"
                     android:paddingRight="16dp"
                     android:paddingBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/desc_move_distance"
+                        android:fontFamily="@font/poppins_medium"
+                        android:textColor="@color/white"
+                        app:layout_constraintLeft_toRightOf="@id/done_move_distance"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="Done"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/done_move_distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_done_all"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                     <TextView
                         android:layout_width="wrap_content"

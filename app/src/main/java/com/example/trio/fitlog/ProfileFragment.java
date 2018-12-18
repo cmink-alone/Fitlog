@@ -18,15 +18,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.trio.fitlog.api.ApiClient;
+import com.example.trio.fitlog.api.ApiService;
 import com.example.trio.fitlog.database.SqliteDbHelper;
+import com.example.trio.fitlog.model.ApiResponse;
+import com.example.trio.fitlog.model.Profile;
 import com.example.trio.fitlog.model.Profile;
 import com.example.trio.fitlog.utils.PreferencesHelper;
 import com.example.trio.fitlog.utils.Util;
+import com.google.gson.Gson;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class ProfileFragment extends Fragment {
@@ -42,6 +55,74 @@ public class ProfileFragment extends Fragment {
     private EditText weight_input;
     private EditText height_input;
     private Toolbar toolbar_detail;
+
+    private TextView followers;
+    private TextView following;
+
+    private List<Profile> followersList;
+    private List<Profile> followingList;
+
+    private ApiService apiService;
+
+    public void loadFollowers(){
+        Observable<List<Profile>> getFollowers = apiService.getUserFollowers()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+        getFollowers.subscribe(
+                new Observer<List<Profile>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Profile> follows) {
+                        followersList = follows;
+                        followers.setText(followersList.size() + " Followers");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }
+        );
+    }
+
+    public void loadFollowing(){
+        Observable<List<Profile>> getFollowing = apiService.getUserFollowing()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+        getFollowing.subscribe(
+                new Observer<List<Profile>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Profile> follows) {
+                        followingList = follows;
+                        following.setText(followingList.size() + " Following");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                }
+        );
+    }
 
     public ProfileFragment() {}
 
@@ -66,6 +147,8 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        apiService = ApiClient.getService(getContext());
+
         toolbar_detail = view.findViewById(R.id.toolbar_detail);
         getActivity().setTitle("Profile");
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar_detail);
@@ -80,6 +163,11 @@ public class ProfileFragment extends Fragment {
         birthday_input = getActivity().findViewById(R.id.birthday_input);
         weight_input = getActivity().findViewById(R.id.weight_input);
         height_input = getActivity().findViewById(R.id.height_input);
+        followers = getActivity().findViewById(R.id.followers);
+        following = getActivity().findViewById(R.id.following);
+
+        loadFollowers();
+        loadFollowing();
 
         birthday_input.setOnClickListener(new View.OnClickListener() {
             @Override

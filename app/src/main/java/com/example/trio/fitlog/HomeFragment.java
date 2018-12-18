@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,10 @@ public class HomeFragment extends Fragment {
     private TextView goal_move_distance;
     private TextView activities;
     private RecyclerView list_date;
+    private ImageView done_move_minute;
+    private ImageView done_move_distance;
+    private TextView desc_move_minute;
+    private TextView desc_move_distance;
 
     DatePickerDialog datePickerDialog;
 
@@ -64,6 +69,22 @@ public class HomeFragment extends Fragment {
         goal_move_minute.setText(String.valueOf(profile.getMove_minutes()));
         goal_move_distance.setText(String.valueOf(profile.getMove_distance()));
         activities.setText(String.valueOf(activitySummary.get("count_activity")));
+
+        desc_move_minute.setVisibility(View.GONE);
+        done_move_minute.setVisibility(View.GONE);
+        if(activitySummary.get("sum_minute") >= profile.getMove_minutes()){
+           done_move_minute.setVisibility(View.VISIBLE);
+            desc_move_minute.setVisibility(View.VISIBLE);
+           desc_move_minute.setText("Done");
+        }
+
+        desc_move_distance.setVisibility(View.GONE);
+        done_move_distance.setVisibility(View.GONE);
+        if(activitySummary.get("sum_distance") >= profile.getMove_distance()){
+            done_move_distance.setVisibility(View.VISIBLE);
+            desc_move_distance.setVisibility(View.VISIBLE);
+            desc_move_distance.setText("Done");
+        }
     }
 
     public HomeFragment() {
@@ -93,6 +114,10 @@ public class HomeFragment extends Fragment {
         goal_move_distance = view.findViewById(R.id.goal_move_distance);
         activities = view.findViewById(R.id.activities);
         list_date = view.findViewById(R.id.list_date);
+        done_move_minute = view.findViewById(R.id.done_move_minute);
+        done_move_distance = view.findViewById(R.id.done_move_distance);
+        desc_move_minute = view.findViewById(R.id.desc_move_minute);
+        desc_move_distance = view.findViewById(R.id.desc_move_distance);
 
         sqliteDbHelper = SqliteDbHelper.getInstance(getContext());
         preferencesHelper = new PreferencesHelper(getContext());

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SearchActivity">
+    <ProgressBar
+        android:id="@+id/progress_horizontal"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorPrimary"
+        android:max="100"
+        android:visibility="invisible" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FFF"
+        android:theme="@style/ToolbarTheme"
+        app:layout_collapseMode="pin"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".SearchActivity">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

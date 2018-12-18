@@ -350,7 +350,8 @@ public class SqliteDbHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex(ProfileContract.COLUMN_GENDER)),
                 cursor.getString(cursor.getColumnIndex(ProfileContract.COLUMN_BIRTHDAY)),
                 cursor.getInt(cursor.getColumnIndex(ProfileContract.COLUMN_WEIGHT)),
-                cursor.getInt(cursor.getColumnIndex(ProfileContract.COLUMN_HEIGHT))
+                cursor.getInt(cursor.getColumnIndex(ProfileContract.COLUMN_HEIGHT)),
+                false
         );
         db.close();
         return profile;
