@@ -286,10 +286,36 @@ public class ProfileFragment extends Fragment {
                 return true;
             case R.id.logout:
                 preferencesHelper.logout();
-                Toast.makeText(getContext(), "Logout success", Toast.LENGTH_SHORT).show();
-                Intent register = new Intent(getContext(), LoginActivity.class);
-                getActivity().startActivity(register);
-                getActivity().finish();
+                apiService.deleteToken(preferencesHelper.getFcm_token())
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<ApiResponse>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onNext(ApiResponse apiResponse) {
+                                Toast.makeText(getContext(), "Logout success", Toast.LENGTH_SHORT).show();
+                                Intent login = new Intent(getContext(), LoginActivity.class);
+                                getActivity().startActivity(login);
+                                getActivity().finish();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Intent login = new Intent(getContext(), LoginActivity.class);
+                                getActivity().startActivity(login);
+                                getActivity().finish();
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

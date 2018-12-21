@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "304671781211",
+    "firebase_url": "https://fitlog-fcm.firebaseio.com",
+    "project_id": "fitlog-fcm",
+    "storage_bucket": "fitlog-fcm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304671781211:android:fff9ef06c541d748",
+        "android_client_info": {
+          "package_name": "com.example.trio.fitlog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "304671781211-oi7tubi94r27tq9e37c4ap560qibnu3g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trio.fitlog",
+            "certificate_hash": "dbc1df2223754531b8667307327988437bf6cdfc"
+          }
+        },
+        {
+          "client_id": "304671781211-nc8j31agjiai49v1aplkh06g8dqsb1fo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEdfNam2iYMFRwsGqBNLgyGNI19GQYTXc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "304671781211-nc8j31agjiai49v1aplkh06g8dqsb1fo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

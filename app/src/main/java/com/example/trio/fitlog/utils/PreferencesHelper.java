@@ -12,6 +12,7 @@ public class PreferencesHelper {
     private final String LOGIN="login";
     private final String TOKEN="token";
     private final String USER_ID="user_id";
+    private final String FCM_TOKEN="fcm_token";
 
     public PreferencesHelper(Context context) {
         sharedPreferences=context.getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE);
@@ -31,6 +32,14 @@ public class PreferencesHelper {
 
     public String getToken(){
         return sharedPreferences.getString(TOKEN,"");
+    }
+
+    public void setFcm_token(String token) {
+        sharedPreferences.edit().putString(FCM_TOKEN,token).apply();
+    }
+
+    public String getFcm_token() {
+        return sharedPreferences.getString(FCM_TOKEN,"");
     }
 
     public void setUserId(int user_id){

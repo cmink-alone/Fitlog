@@ -40,6 +40,12 @@ public interface ApiService {
     @GET("follow/search/{q}")
     Observable<List<Profile>> search(@Path("q") String q);
 
+    @GET("fcm/add/{token}")
+    Observable<ApiResponse> insertToken(@Path("token") String token);
+
+    @GET("fcm/delete/{token}")
+    Observable<ApiResponse> deleteToken(@Path("token") String token);
+
     @GET("follower/remove/{id}")
     Observable<Integer> remove_follower(@Path("id") int id);
 

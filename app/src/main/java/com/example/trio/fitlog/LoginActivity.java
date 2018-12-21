@@ -14,6 +14,7 @@ import com.example.trio.fitlog.api.ApiClient;
 import com.example.trio.fitlog.api.ApiService;
 import com.example.trio.fitlog.database.SqliteDbHelper;
 import com.example.trio.fitlog.model.Activity;
+import com.example.trio.fitlog.model.ApiResponse;
 import com.example.trio.fitlog.model.Auth;
 import com.example.trio.fitlog.model.Profile;
 import com.example.trio.fitlog.utils.PreferencesHelper;
@@ -21,6 +22,10 @@ import com.example.trio.fitlog.utils.Util;
 
 import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,6 +82,31 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginSuccess(){
         apiService.getAllUser().enqueue(new UserCallback());
+        Toast.makeText(this, "TOKEN: "+preferencesHelper.getFcm_token(), Toast.LENGTH_SHORT).show();
+        apiService.insertToken(preferencesHelper.getFcm_token())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ApiResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ApiResponse apiResponse) {
+                        Toast.makeText(LoginActivity.this, "Insert Success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
         //apiService.getAllActivity().enqueue(new ActivityCallback());
 
     }
