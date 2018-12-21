@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -121,6 +122,7 @@ public class HomeFragment extends Fragment {
 
         sqliteDbHelper = SqliteDbHelper.getInstance(getContext());
         preferencesHelper = new PreferencesHelper(getContext());
+        Log.w("TEST", String.valueOf(preferencesHelper.getUserId()));
         profile = sqliteDbHelper.getProfile(preferencesHelper.getUserId());
 
         activitySummary = sqliteDbHelper.getActivitySummary(Util.calendarToString(homeCalendar,"yyyy-MM-dd"));

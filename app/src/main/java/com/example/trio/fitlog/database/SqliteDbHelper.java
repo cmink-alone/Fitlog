@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SqliteDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 24;
+    public static final int DATABASE_VERSION = 25;
     public static final String DATABASE_NAME = "Fitlog.db";
     public static SqliteDbHelper instance;
 

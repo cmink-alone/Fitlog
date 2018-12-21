@@ -79,9 +79,6 @@ public class LoginActivity extends AppCompatActivity {
         apiService.getAllUser().enqueue(new UserCallback());
         //apiService.getAllActivity().enqueue(new ActivityCallback());
 
-        Intent main = new Intent(LoginActivity.this, MainActivity.class);
-        LoginActivity.this.startActivity(main);
-        finish();
     }
 
     class LoginCallback implements Callback<Auth>{
@@ -98,7 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
             }
             btnLogin.setEnabled(true);
-            progressBar.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -115,8 +111,18 @@ public class LoginActivity extends AppCompatActivity {
             if(response.isSuccessful()) {
                 List<Profile> profiles = response.body();
                 SqliteDbHelper.getInstance(getApplicationContext()).insertProfiles(profiles);
+
+                Intent main = new Intent(LoginActivity.this, MainActivity.class);
+                LoginActivity.this.startActivity(main);
+                finish();
+
                 Util.profilesLoaded = true;
+            } else {
+
+                Toast.makeText(LoginActivity.this, "INSERT PROFILE FAILED", Toast.LENGTH_SHORT).show();
             }
+
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
         @Override
